@@ -10,7 +10,8 @@ Version 2.0
 + changed table type to InnoDB
 + added foreign keys for all tables 
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
