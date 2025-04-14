@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  api:
+    image: golang:1.22.2
+    build: ./Go
+    ports:
+      - "8080:8080"
+    networks:
+      - redExamen
+    depends_on:
+      - db
+    #links:
+    #  - api
+
+
+  db:
+    build: ./MySQL
+    networks:
+      - redExamen
+    #links:
+    #  - db
+
+  frontend:
+    build: ./Node
+    ports:
+      - "3000:3000"
+    networks:
+      - redExamen
+    depends_on:
+      - api
+
+
+networks:
+  redExamen:
+    driver: bridge
+
