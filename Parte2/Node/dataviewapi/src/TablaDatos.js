@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 // URL de tu API (asegúrate de que sea accesible)
 // Puede que necesites http:// o https://
-const apiUrl = 'http://api:8080/items'; // <-- AJUSTA ESTO SI ES NECESARIO
+const apiUrl = 'http://localhost:8080/items'; // <-- AJUSTA ESTO SI ES NECESARIO
 
 function TablaDatos() {
     // Estado para almacenar los datos de la API
