@@ -2,7 +2,7 @@ FROM node:latest
 
 WORKDIR /app
 
-COPY ./dataviewapi .
+COPY . .
 RUN npm install
 
 
