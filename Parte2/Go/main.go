@@ -78,31 +78,6 @@ func getItems(c *gin.Context) {
 	c.JSON(http.StatusOK, items)
 }
 
-// getItemByID handles the GET request for a specific item by ID
-/*func getItemByID(c *gin.Context) {
-	id := c.Param("id")
-
-	db, err := sql.Open("mysql", getDBConfig())
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	var item Item
-	row := db.QueryRow("SELECT customerNumber, customerName, city FROM customers WHERE customerNumber =?", id) // Replace "items" with your actual table name
-	err = row.Scan(&item.ID, &item.Name, &item.Model)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			c.JSON(http.StatusNotFound, gin.H{"message": "item not found"})
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"message": "failed to scan data", "error": err.Error()})
-		}
-		return
-	}
-
-	c.JSON(http.StatusOK, item)
-}*/
-
 // errorHandler middleware for handling errors
 func errorHandler(c *gin.Context) {
 	c.Next()
