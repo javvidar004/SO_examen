@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-// URL de tu API (asegúrate de que sea accesible)
-// Puede que necesites http:// o https://
-const apiUrl = 'http://localhost:8080/items'; // <-- AJUSTA ESTO SI ES NECESARIO
+const apiUrl = 'http://localhost:8080/items'; 
 
 function TablaDatos() {
     // Estado para almacenar los datos de la API
-    const [data, setData] = useState([]); // Inicializa como array vacío
+    const [data, setData] = useState([]); 
     // Estado para manejar el estado de carga
     const [loading, setLoading] = useState(true);
     // Estado para manejar los errores
@@ -17,7 +15,6 @@ function TablaDatos() {
         // Define la función asíncrona para buscar los datos
         const fetchData = async () => {
             try {
-                // Reinicia el estado antes de la llamada
                 setLoading(true);
                 setError(null);
 
@@ -35,41 +32,31 @@ function TablaDatos() {
                     setData(jsonData);
                 } else {
                     console.warn("La respuesta de la API no fue un array:", jsonData);
-                    setData([]); // Establece un array vacío para evitar errores posteriores
-                    // Opcionalmente, podrías lanzar un error aquí si siempre esperas un array
-                    // throw new Error("Formato de datos inesperado.");
+                    setData([]);
                 }
 
             } catch (err) {
                 // Captura cualquier error durante el fetch o procesamiento
                 console.error("Error al obtener los datos:", err);
                 setError(err);
-                setData([]); // Limpia los datos en caso de error
+                setData([]); 
             } finally {
-                // Se ejecuta siempre, haya habido éxito o error
                 setLoading(false); // Marca que la carga ha terminado
             }
         };
 
         fetchData(); // Llama a la función para obtener los datos
 
-        // El array vacío [] como segundo argumento de useEffect significa
-        // que este efecto se ejecutará solo una vez, similar a componentDidMount
-    }, []); // El array de dependencias vacío es crucial aquí
+     }, []); // El array de dependencias vacío es crucial aquí
 
-    // --- Renderizado condicional ---
-
-    // Muestra un mensaje mientras carga
     if (loading) {
         return <p>Cargando datos...</p>;
     }
 
-    // Muestra un mensaje si hubo un error
     if (error) {
         return <p>Error al cargar los datos: {error.message}</p>;
     }
 
-    // Muestra un mensaje si no hay datos (después de cargar y sin errores)
     if (data.length === 0) {
         return <p>No se encontraron datos.</p>;
     }
