@@ -1,5 +1,3 @@
-TablaDatos.js
-
 import React, { useState, useEffect } from 'react';
 
 // URL de tu API (asegúrate de que sea accesible)
