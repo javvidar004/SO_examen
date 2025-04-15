@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	mysql "github.com/go-sql-driver/mysql"
 )
@@ -20,7 +21,6 @@ const (
 	dbName = "classicmodels"
 )
 
-// Item struct represents the data to be retrieved from the database
 type Item struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
@@ -36,7 +36,7 @@ func getDBConfig() string {
 		Addr:                 fmt.Sprintf("%s:%s", dbHost, dbPort),
 		DBName:               dbName,
 		AllowNativePasswords: true,
-		ParseTime:            true, // ¡Importante para mapear a time.Time!
+		ParseTime:            true,
 		Loc:                  time.Local,
 		Params: map[string]string{
 			"charset": "utf8mb4",
@@ -79,7 +79,7 @@ func getItems(c *gin.Context) {
 }
 
 // getItemByID handles the GET request for a specific item by ID
-func getItemByID(c *gin.Context) {
+/*func getItemByID(c *gin.Context) {
 	id := c.Param("id")
 
 	db, err := sql.Open("mysql", getDBConfig())
@@ -101,7 +101,7 @@ func getItemByID(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, item)
-}
+}*/
 
 // errorHandler middleware for handling errors
 func errorHandler(c *gin.Context) {
@@ -114,36 +114,27 @@ func errorHandler(c *gin.Context) {
 }
 
 func main() {
-	// Load environment variables from.env file if it exists
-	// This is useful for local development. In production, you might set
-	// the DB_CONNECTION_STRING environment variable directly.
-	// Note: You might need to install a library like 'github.com/joho/godotenv'
-	// and call godotenv.Load() here if you want to use a.env file.
-	// For this example, we'll assume the DB_CONNECTION_STRING is already set
-	// as an environment variable.
-
-	// Example of how to set the environment variable (for testing purposes only,
-	// do not hardcode credentials in production):
-	// os.Setenv("DB_CONNECTION_STRING", "your_user:your_password@tcp(127.0.0.1:3306)/your_database?charset=utf8mb4&parseTime=True&loc=Local")
-
-	/*if os.Getenv("DB_CONNECTION_STRING") == "" {
-		log.Fatal("DB_CONNECTION_STRING environment variable not set")
-		return
-	}*/
-
 	router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	// Use the error handler middleware
 	router.Use(errorHandler)
 
-	// Define API endpoints
+	// API endpoints
 	router.GET("/items", getItems)
-	router.GET("/items/:id", getItemByID)
 
 	// Start the server
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080" // Default port if not specified in environment
+		port = "8080"
 	}
 	if err := router.Run(":" + port); err != nil {
 		log.Fatalf("Failed to run server: %v", err)
