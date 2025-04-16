@@ -69,6 +69,27 @@ Lo realmente importante es que se copia el documento con el dump de la base de d
 
 ### Contenedor Go
 
+Para Go tenemos 4 documentos:  
+    Dockerfile  
+    go.mod  
+    go.sum  
+    main.go  
+
+go.mod: es el documento de modulo de Go. Aqui es donde se anotan cuales son las dependencias del modulo en cuestion. Se usa para poder usar las dependencias necesarias externas en el programa o paquetes que se usen en un programa. Este documento se modifica solo usando el comando para descargar dependencias externas.  
+
+go.sum: se modifica al igual que con el go.mod y este tiene la lista de las dependencias almacenas y es necesario que haya concordancia entre unos y otros.
+
+#### main.go
+
+Dependencias:  
+"github.com/go-sql-driver/mysql"  
+Es el driver que permite la conexion entre go y mysql. Necesario para traer los datos de la base de datos a la API  
+
+"github.com/gin-gonic/gin"  
+Es un Framework Web que sirve para desarrollar la API en Go. Con este se pueden definir los endpoint, asi como definir las funciones por las cuales se transmitiran los datos.  
+
+"github.com/gin-contrib/cors"  
+Este modulo sirve para el problema con CORS en la API, en caso de no generar ni usar modificacion alguna no permite acceso de otras aplicaciones. Por lo tanto se usa para definir los permisos de acceso.
 
 
 ### Contenedor Node
