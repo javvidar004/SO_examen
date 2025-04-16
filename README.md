@@ -122,5 +122,19 @@ Y finalmente se ejecuta el servidor en el puerto 8080.
 Por ultimo, el Dockerfile copia los archivos de las dependencias para despues ejecutar la instalacion de los mismos, despues copia el programa de la API. Para finalmente declarar el comando para que la API este en ejecucion.
 
 
-
 ### Contenedor Node
+
+Para este contenedor primero se creo la aplicacion en React. El unico documento modificado fue App.js y se agrego el documento TablaDatos.js. En App.js solo se agrega el componente que se declara en TablaDatos.js.  
+
+En tabla datos primero se declara la URL de la api. Para declarar la URL primero tenia un error el cual era utilizar la URL como si todo se estuviera ejecutando desde el lado del servidor porque ponia el URL 'http://api:8080/items' y generaba error haciendome pensar que el DNS de Docker estaba fallando pero resulta que al estarse ejecutando del lado del cliente habia que hacer la llamada desde el localhost, por lo que la URL definitiva fue 'http://localhost:8080/items'.  
+
+Dentro solo se define una funcion que es con la cual se reciben los datos y se muestran en el HTML. Se manejan excepciones en la obtencion de los datos, pero en caso de obtenerlos se pasa a la parte inferior en la cual se define la tabla con en la cual se mostraran los datos obtenidos de la API.  
+
+Los documentos package.json y package-lock.json son los documentos de las dependencias de para ejecutar la aplicacion. Los cuales son esenciales para la ejecucion de la aplicacion en el contenedor.  
+
+El Dockerfile copia los datos que estan en la carpeta de la aplicacion y despues ejecuta
+```
+npm install
+```
+El cual instala las dependencias para despues definir, la ejecucion del programa y que siempre que se ejecute el contenedor se ejecute la aplicacion.  
+
