@@ -48,7 +48,85 @@ RUN wget https://github.com/godotengine/godot/releases/download/4.4-stable/Godot
 
 CMD ["godot", "--headless"]
 ```
-Si tratamos de ejecutar lo siguiente genera un error.
+Si tratamos de ejecutar lo siguiente se genera el siguiente error: wget not found  
+Por lo que es necesario instalarlo, ademas de primero actualizar apt-get  
+```
+FROM ubuntu:24.04
+
+RUN apt-get update && apt-get install -y wget
+
+RUN wget https://github.com/godotengine/godot/releases/download/4.4-stable/Godot_v4.4-stable_linux.x86_64.zip -O /tmp/godot.zip \
+&& rm /tmp/godot.zip \
+&& mv /usr/local/bin/Godot_v4.4-stable_linux.x86_64 /usr/local/bin/godot+
+
+CMD ["godot", "--headless"]
+```
+Con esa correccion llegamos al siguiente error: mv: cannot stat '/usr/local/bin/Godot_v4.4-stable_linux.x86_64': No such file or directory  
+Pero tambien hay que extraer los datos del zip antes del eliminarlo ya que se descarga u se elimina.  
+
+```
+FROM ubuntu:24.04
+
+RUN apt-get update && apt-get install -y wget
+
+RUN wget https://github.com/godotengine/godot/releases/download/4.4-stable/Godot_v4.4-stable_linux.x86_64.zip -O /tmp/godot.zip \
+&& unzip /tmp/godot.zip \
+&& rm /tmp/godot.zip \
+&& mv /usr/local/bin/Godot_v4.4-stable_linux.x86_64 /usr/local/bin/godot+
+
+CMD ["godot", "--headless"]
+```
+unzip: not found
+
+```
+FROM ubuntu:24.04
+
+RUN apt-get update && apt-get install -y wget unzip
+
+RUN wget https://github.com/godotengine/godot/releases/download/4.4-stable/Godot_v4.4-stable_linux.x86_64.zip -O /tmp/godot.zip \
+&& unzip /tmp/godot.zip \
+&& rm /tmp/godot.zip \
+&& mv /usr/local/bin/Godot_v4.4-stable_linux.x86_64 /usr/local/bin/godot+
+
+CMD ["godot", "--headless"]
+```
+Ahora volvemos al mismo error de antes. En el cual no se ha encontrado el directorio
+```
+FROM ubuntu:24.04
+
+RUN apt-get update && apt-get install -y wget unzip
+
+RUN wget https://github.com/godotengine/godot/releases/download/4.4-stable/Godot_v4.4-stable_linux.x86_64.zip -O /tmp/godot.zip \
+&& unzip /tmp/godot.zip \
+&& rm /tmp/godot.zip \
+&& mv Godot_v4.4-stable_linux.x86_64 /usr/local/bin/godot
+
+CMD ["godot", "--headless"]
+```
+En este este caso si se puede realizar el docker build pero cuando se intenta ejecutar señala un error:  
+unable to start container process exec: "godot": executable file not found in $PATH: unkown  
+Ejecutando el contenedor sin CMD se puede ejecutar pero marca ciertos errores.
+Pide instalar fontconfig y se debe ejecutar desde el directorio donde esta guardado.
+```
+FROM ubuntu:24.04
+
+RUN apt-get update && apt-get install -y wget unzip fontconfig
+
+RUN wget https://github.com/godotengine/godot/releases/download/4.4-stable/Godot_v4.4-stable_linux.x86_64.zip -O /tmp/godot.zip \
+&& unzip /tmp/godot.zip \
+&& rm /tmp/godot.zip \
+&& mv Godot_v4.4-stable_linux.x86_64 /usr/local/bin/godot
+
+WORKDIR /usr/local/bin
+
+CMD ["godot", "--headless"]
+```
+
+De esta manera ya no genera errores y se puede comprobar que se llego al resultado con el siguiente comando:
+```
+docker logs nombreContenedor
+```
+
 
 ## Parte 2
 El desarrollo de la parte 2 tomo mucho tiempo, pues se soluciona un error pero despues se genera otro. Es importante resaltar que implico mucha investigacion para lograr el siguiente proyecto ya que nunca habia trabajado con React a excepcion de ejecutar un proyecto y desarrollar una API en Go es mucho mas avanzado que simplemente programar algo basico en Go.  
