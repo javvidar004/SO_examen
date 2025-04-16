@@ -89,7 +89,11 @@ Es el driver que permite la conexion entre go y mysql. Necesario para traer los 
 Es un Framework Web que sirve para desarrollar la API en Go. Con este se pueden definir los endpoint, asi como definir las funciones por las cuales se transmitiran los datos.  
 
 "github.com/gin-contrib/cors"  
-Este modulo sirve para el problema con CORS en la API, en caso de no generar ni usar modificacion alguna no permite acceso de otras aplicaciones. Por lo tanto se usa para definir los permisos de acceso.
+Este modulo sirve para el problema con CORS en la API, en caso de no generar ni usar modificacion alguna no permite acceso de otras aplicaciones. Por lo tanto se usa para definir los permisos de acceso.  
+
+Despues se definen las constantes las cuales son los datos de acceso para la base de datos en cuestion. Para el caso de dbHost no se define la IP del contenedor pues este tiende a cambiar y por la red de Docker puede cambiar. Al docker tener integrado DNS se puede usar con el nombre que se define del contenedor en el docker-compose.  
+
+Se define la estructura sobre la cual se recibiran los datos de la base de datos y despues se enviaran en formato JSON al frontend.  
 
 
 ### Contenedor Node
