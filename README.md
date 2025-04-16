@@ -95,5 +95,32 @@ Despues se definen las constantes las cuales son los datos de acceso para la bas
 
 Se define la estructura sobre la cual se recibiran los datos de la base de datos y despues se enviaran en formato JSON al frontend.  
 
+Despues se encuentra la funcion getDBConfig() esta funcion usa los datos de conexion para crear la DSN (Data Source Name) el cual es la linea de texto, que describe la conexion con la base de datos. Ademas al darle formato DSN no es necesario estructurar la linea de texto directamente y es mas claro el acceso y la declaracion de los datos.  
+
+```
+getDBConfig()
+```
+
+Seguido esta la funcion getItems() esta es la funcion que genera el request a la base de datos y tambien mas adelante se declara como la funcion a ejecutar en un determinado endpoint de la API. Por ser usada como funcion que manda datos en formato JSON, pasa por parametro el contexto de Gin, que es lo que enviara al frontend.  
+Dentro de la misma funcion se genera la conexion a la base de datos, se ejecuta el query definido, se almacenan los datos en un slice para organizarlos y darles formato.  
+Se manejan las diferentes excepciones ya sea por si el query fallo, el escaneo de datos, o la iteracion al manejar los datos.
+Finalmente si todo esta bien, regresa los datos en formato JSON y con codigo 200.  
+```
+getItems()
+```
+La siguiente es importante para saber en caso de errores donde se ha ocasionado el error dentro de la API.  
+```
+errorHandler()
+```
+
+Finalmente en el main se define el funcionamiento de Gin.  
+Despues la configuracion de CORS para permiter el acceso y las solicitudes desde el frontend.  
+Se introduce el manejador de errores a Gin.  
+Se define el endpoint de la API.  
+Y finalmente se ejecuta el servidor en el puerto 8080.  
+
+Por ultimo, el Dockerfile copia los archivos de las dependencias para despues ejecutar la instalacion de los mismos, despues copia el programa de la API. Para finalmente declarar el comando para que la API este en ejecucion.
+
+
 
 ### Contenedor Node
