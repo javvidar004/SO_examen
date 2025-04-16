@@ -24,7 +24,7 @@ const (
 type Item struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
-	Model string `json:"model"`
+	Country string `json:"country"`
 }
 
 func getDBConfig() string {
@@ -62,7 +62,7 @@ func getItems(c *gin.Context) {
 	var items []Item
 	for rows.Next() {
 		var item Item
-		if err := rows.Scan(&item.ID, &item.Name, &item.Model); err != nil {
+		if err := rows.Scan(&item.ID, &item.Name, &item.Country); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"message": "failed to scan data", "error": err.Error()})
 			return
 		}
