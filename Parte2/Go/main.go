@@ -28,7 +28,6 @@ type Item struct {
 }
 
 func getDBConfig() string {
-	// Construir el DSN usando mysql.Config para mayor legibilidad y seguridad
 	cfg := mysql.Config{
 		User:                 dbUser,
 		Passwd:               dbPass,
@@ -45,7 +44,7 @@ func getDBConfig() string {
 	return cfg.FormatDSN()
 }
 
-// getItems handles the GET request for all items
+// getItems for request to database
 func getItems(c *gin.Context) {
 	db, err := sql.Open("mysql", getDBConfig())
 	if err != nil {
@@ -78,7 +77,7 @@ func getItems(c *gin.Context) {
 	c.JSON(http.StatusOK, items)
 }
 
-// errorHandler middleware for handling errors
+// errorHandler
 func errorHandler(c *gin.Context) {
 	c.Next()
 	if len(c.Errors) > 0 {
@@ -100,18 +99,11 @@ func main() {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	// Use the error handler middleware
+	// Use the error handler
 	router.Use(errorHandler)
 
 	// API endpoints
 	router.GET("/items", getItems)
 
-	// Start the server
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
-	if err := router.Run(":" + port); err != nil {
-		log.Fatalf("Failed to run server: %v", err)
-	}
+	router.Run(":8080")
 }
